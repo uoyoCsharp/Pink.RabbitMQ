@@ -1,17 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: RabbitMQ中定义的队列参数
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-
-namespace Pink.RabbitMQ
+﻿namespace Pink.RabbitMQ
 {
     /// <summary>
     /// Rabbit队列定义时使用的参数
@@ -57,7 +44,6 @@ namespace Pink.RabbitMQ
         /// </summary>
         internal string DeadLetterExchangeName { get; private set; }
 
-
         /// <summary>
         /// 当消息过期或被拒绝时重新发布到交换机时使用的路由键，未设置时使用原消息的RoutingKey
         /// </summary>
@@ -71,7 +57,7 @@ namespace Pink.RabbitMQ
         {
             if (republishToDeadQueue)
             {
-                this.DeadLetterRepublishRule = 1;
+                DeadLetterRepublishRule = 1;
             }
         }
 
@@ -84,11 +70,10 @@ namespace Pink.RabbitMQ
         {
             if (!string.IsNullOrEmpty(exchangeName))
             {
-                this.DeadLetterRepublishRule = 2;
-                this.DeadLetterExchangeName = exchangeName;
-                this.DeadLetterRoutingKey = routingKey;
+                DeadLetterRepublishRule = 2;
+                DeadLetterExchangeName = exchangeName;
+                DeadLetterRoutingKey = routingKey;
             }
         }
-
     }
 }

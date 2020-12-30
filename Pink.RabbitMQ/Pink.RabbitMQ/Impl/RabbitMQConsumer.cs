@@ -1,17 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: 适用于RabbitMQ的消息消费端
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Pink.RabbitMQ.Helper;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

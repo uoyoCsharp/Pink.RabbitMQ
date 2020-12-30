@@ -22,8 +22,8 @@
         /// <param name="publisher"></param>
         internal MQTransactionContent(IMQManager manager, IMQPublisher publisher)
         {
-            this.ManagerInstance = manager;
-            this.PublisherInstance = publisher;
+            ManagerInstance = manager;
+            PublisherInstance = publisher;
         }
     }
 }

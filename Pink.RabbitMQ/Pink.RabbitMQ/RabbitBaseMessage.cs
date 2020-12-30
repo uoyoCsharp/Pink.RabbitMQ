@@ -1,16 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: RabbitMQ的出列时消息的基础信息类
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,15 +64,15 @@ namespace Pink.RabbitMQ
         /// </summary>
         internal void AutoParseHeaderString()
         {
-            if (this.HeaderArguments == null || this.HeaderArguments.Count == 0)
+            if (HeaderArguments == null || HeaderArguments.Count == 0)
             {
                 return;
             }
 
-            var stringItems = this.HeaderArguments.Where(x => x.Value != null && x.Value.GetType() == typeof(byte[])).Select(x => x.Key).ToArray();
+            var stringItems = HeaderArguments.Where(x => x.Value != null && x.Value.GetType() == typeof(byte[])).Select(x => x.Key).ToArray();
             foreach (var key in stringItems)
             {
-                this.HeaderArguments[key] = Encoding.UTF8.GetString(this.HeaderArguments[key] as byte[]);
+                HeaderArguments[key] = Encoding.UTF8.GetString(HeaderArguments[key] as byte[]);
             }
         }
 

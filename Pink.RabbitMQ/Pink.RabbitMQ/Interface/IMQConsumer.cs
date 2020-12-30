@@ -1,17 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: MQ的消费端
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-
-using System;
+﻿using System;
 
 namespace Pink.RabbitMQ
 {

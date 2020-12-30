@@ -1,17 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: 适用于RabbitMQ的队列或交换机管理
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -46,8 +33,8 @@ namespace Pink.RabbitMQ
         /// <param name="existsQueue">已存在的队列名称</param>
         public RabbitMQManager(Expression<Func<IModel>> manageChannelGetExp, HashSet<string> existsQueue)
         {
-            this.channelGetMethod = manageChannelGetExp.Compile();
-            this.setExistsQueue = existsQueue;
+            channelGetMethod = manageChannelGetExp.Compile();
+            setExistsQueue = existsQueue;
         }
 
         #endregion
@@ -61,7 +48,7 @@ namespace Pink.RabbitMQ
         {
             get
             {
-                return this.channelGetMethod.Invoke();
+                return channelGetMethod.Invoke();
             }
         }
 
@@ -78,7 +65,6 @@ namespace Pink.RabbitMQ
         /// <param name="type">交换机类型</param>
         /// <param name="alternateExchangeName">当消息投递不成功时的转发到的备用交换机名称(由此交换机进行转投)</param>
         /// <param name="arguments">其它参数</param>
-        /// <remarks>arguments好像然并卵</remarks>
         public void ExchangeDeclare(string name, RabbitExchangeType type, string alternateExchangeName = null, IDictionary<string, object> arguments = null)
         {
             if (string.IsNullOrEmpty(name))
@@ -311,7 +297,7 @@ namespace Pink.RabbitMQ
                 }
                 return rtnValue;
             }
-            catch (OperationInterruptedException ex)
+            catch (OperationInterruptedException)
             {
                 return rtnValue;
             }
@@ -343,7 +329,7 @@ namespace Pink.RabbitMQ
                 }
                 return rtnValue;
             }
-            catch (OperationInterruptedException ex)
+            catch (OperationInterruptedException)
             {
                 return rtnValue;
             }

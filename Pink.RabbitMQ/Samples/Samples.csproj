@@ -44,5 +44,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pink.RabbitMQ\Pink.RabbitMQ.csproj">
+      <Project>{4ab07f84-1470-44d5-b652-8740aa6c14b5}</Project>
+      <Name>Pink.RabbitMQ</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,21 +1,9 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: RabbitMQ的客户端
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using RabbitMQ.Client.Exceptions;
 
 namespace Pink.RabbitMQ
 {
@@ -114,19 +102,19 @@ namespace Pink.RabbitMQ
         /// <param name="port">端口</param>
         /// <param name="userName">用户名</param>
         /// <param name="password">密码</param>
-        public RabbitMQClient(string hostName, string virtualHost, uint port, string userName, string password)
+        public RabbitMQClient(string hostName, string virtualHost, int port, string userName, string password)
         {
             ConnectionFactory fac = new ConnectionFactory();
             fac.HostName = hostName;
-            fac.VirtualHost = this.VirtualHost = string.IsNullOrEmpty(virtualHost) ? "/" : virtualHost;
-            fac.Port = (int)port;
+            fac.VirtualHost = VirtualHost = string.IsNullOrEmpty(virtualHost) ? "/" : virtualHost;
+            fac.Port = port;
             fac.UserName = userName;
             fac.Password = password;
             fac.AutomaticRecoveryEnabled = true;
             fac.NetworkRecoveryInterval = TimeSpan.FromSeconds(10);
 
-            this.con = fac.CreateConnection();
-            this.baseChannel = con.CreateModel();
+            con = fac.CreateConnection();
+            baseChannel = con.CreateModel();
         }
         #endregion
 
@@ -139,9 +127,9 @@ namespace Pink.RabbitMQ
         {
             get
             {
-                if (baseChannel.IsClosed && this.con.IsOpen)
+                if (baseChannel.IsClosed && con.IsOpen)
                 {
-                    baseChannel = this.con.CreateModel();
+                    baseChannel = con.CreateModel();
                 }
 
                 return baseChannel;
@@ -166,7 +154,7 @@ namespace Pink.RabbitMQ
                     {
                         if (_innerPublisher == null)
                         {
-                            _innerPublisher = new RabbitMQPublisher(() => this.UsableChannel, this.setExistsQueue, this.ManagerInstance.QueueDeclare);
+                            _innerPublisher = new RabbitMQPublisher(() => UsableChannel, setExistsQueue, ManagerInstance.QueueDeclare);
                         }
                     }
                 }
@@ -188,7 +176,7 @@ namespace Pink.RabbitMQ
                     {
                         if (_innerManager == null)
                         {
-                            _innerManager = new RabbitMQManager(() => this.UsableChannel, this.setExistsQueue);
+                            _innerManager = new RabbitMQManager(() => UsableChannel, setExistsQueue);
                         }
                     }
                 }
@@ -210,7 +198,7 @@ namespace Pink.RabbitMQ
                     {
                         if (_innerConsumer == null)
                         {
-                            _innerConsumer = new RabbitMQConsumer(() => this.UsableChannel, () => this.con.CreateModel());
+                            _innerConsumer = new RabbitMQConsumer(() => UsableChannel, () => con.CreateModel());
                         }
                     }
                 }
@@ -251,11 +239,11 @@ namespace Pink.RabbitMQ
                 try
                 {
                     //专门用于事务的Channel
-                    transChannel = this.con.CreateModel();
+                    transChannel = con.CreateModel();
                     MQTransactionContent transContent = new MQTransactionContent
                     (
-                        new RabbitMQManager(() => transChannel, this.setExistsQueue),
-                        new RabbitMQPublisher(() => transChannel, this.setExistsQueue, this.ManagerInstance.QueueDeclare)
+                        new RabbitMQManager(() => transChannel, setExistsQueue),
+                        new RabbitMQPublisher(() => transChannel, setExistsQueue, ManagerInstance.QueueDeclare)
                     );
 
                     transChannel.TxSelect();
@@ -306,8 +294,8 @@ namespace Pink.RabbitMQ
         public SortedDictionary<ulong, bool> PublishConfirm(params Action<IMQPublisher>[] publishActions)
         {
 
-            var confirmChannel = this.con.CreateModel();
-            IMQPublisher confirmPublisher = new RabbitMQPublisher(() => confirmChannel, this.setExistsQueue, this.ManagerInstance.QueueDeclare);
+            var confirmChannel = con.CreateModel();
+            IMQPublisher confirmPublisher = new RabbitMQPublisher(() => confirmChannel, setExistsQueue, ManagerInstance.QueueDeclare);
             confirmChannel.ConfirmSelect();
             SortedDictionary<ulong, bool> dicValues = new SortedDictionary<ulong, bool>();
 
@@ -333,11 +321,11 @@ namespace Pink.RabbitMQ
 
                         dicValues[dicValues.Keys.Max()] = confirmChannel.WaitForConfirms();
                     }
-                    catch (AlreadyClosedException ex)
+                    catch (AlreadyClosedException)
                     {
                         break;
                     }
-                    catch (OperationInterruptedException ex)
+                    catch (OperationInterruptedException)
                     {
                         break;
                     }
@@ -362,8 +350,8 @@ namespace Pink.RabbitMQ
         /// <returns>已发布成功的方法序号(从1开始)，以及有异常时的相应描述</returns>
         public Tuple<ulong, Exception> PublishConfirms(params Action<IMQPublisher>[] publishActions)
         {
-            var confirmChannel = this.con.CreateModel();
-            IMQPublisher confirmPublisher = new RabbitMQPublisher(() => confirmChannel, this.setExistsQueue, this.ManagerInstance.QueueDeclare);
+            var confirmChannel = con.CreateModel();
+            IMQPublisher confirmPublisher = new RabbitMQPublisher(() => confirmChannel, setExistsQueue, ManagerInstance.QueueDeclare);
             confirmChannel.ConfirmSelect();
             Tuple<ulong, Exception> rtnValue;
 
@@ -412,8 +400,8 @@ namespace Pink.RabbitMQ
         /// <returns>发送消息的专用生产端，可获取已发送的序号，关闭通道等</returns>
         public IMQPublisher PublishConfirmAsync(Action<PublishAckArgs> ackHandler, Action<PublishNAckArgs> nackHandler, params Action<IMQPublisher>[] publishActions)
         {
-            var confirmChannel = this.con.CreateModel();
-            IMQPublisher confirmPublisher = new RabbitMQPublisher(() => confirmChannel, this.setExistsQueue, this.ManagerInstance.QueueDeclare);
+            var confirmChannel = con.CreateModel();
+            IMQPublisher confirmPublisher = new RabbitMQPublisher(() => confirmChannel, setExistsQueue, ManagerInstance.QueueDeclare);
             confirmChannel.ConfirmSelect();
 
             //确认接收
@@ -436,19 +424,19 @@ namespace Pink.RabbitMQ
                 }
 
             }
-            catch (AlreadyClosedException ex)
+            catch (AlreadyClosedException)
             {
 
             }
-            catch (OperationInterruptedException ex)
+            catch (OperationInterruptedException)
             {
 
             }
-            catch (System.IO.IOException ex)
+            catch (System.IO.IOException)
             {
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //publishActions内的异常，这时还未调用Publish故计算器不会预加1
             }
@@ -475,9 +463,9 @@ namespace Pink.RabbitMQ
                 if (disposing)
                 {
                     //如果有消费端，须先关闭和释放消费端的每个通道
-                    if (this._innerConsumer != null)
+                    if (_innerConsumer != null)
                     {
-                        this._innerConsumer.Dispose();
+                        _innerConsumer.Dispose();
                     }
 
                     //公共通道的关闭和释放

@@ -1,16 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: MQ的队列、交换机的定义、管理、维护等
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Pink.RabbitMQ
 {

@@ -1,16 +1,4 @@
-﻿/*
- * 
- * Encoding:UTF-8
- * Version: 1.0
- * Create Date:  2019-08-20
- * Author: Richie
- * Description: MQ的生产者
- *           
- * Modify Date: 
- * Modifier: 
- * Description: 
-*/
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
@@ -107,9 +95,9 @@ namespace Pink.RabbitMQ
     {
         internal PublishAckArgs(ulong publishedSeqNo, ulong deliveryTag, bool multiple)
         {
-            this.PublishedSeqNo = publishedSeqNo;
-            this.DeliveryTag = deliveryTag;
-            this.Multiple = multiple;
+            PublishedSeqNo = publishedSeqNo;
+            DeliveryTag = deliveryTag;
+            Multiple = multiple;
         }
 
         /// <summary>
@@ -125,10 +113,10 @@ namespace Pink.RabbitMQ
     {
         internal PublishNAckArgs(ulong publishedSeqNo, ulong deliveryTag, bool multiple, bool requeue)
         {
-            this.PublishedSeqNo = publishedSeqNo;
-            this.DeliveryTag = deliveryTag;
-            this.Multiple = multiple;
-            this.Requeue = requeue;
+            PublishedSeqNo = publishedSeqNo;
+            DeliveryTag = deliveryTag;
+            Multiple = multiple;
+            Requeue = requeue;
         }
 
         /// <summary>
