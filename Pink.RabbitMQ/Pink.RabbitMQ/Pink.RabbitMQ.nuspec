@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Pink.RabbitMQ</id>
+    <version>1.0.1</version>
+    <title>$title$</title>
+    <authors>uoyoCsharp</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/uoyoCsharp/Pink.RabbitMQ</projectUrl>
+    <description>.NET Framework 4下的RabbitMQ简单化操作工具库</description>
+    <copyright>$copyright$</copyright>
+    <tags>RabbitMQ</tags>
+    <dependencies>
+      <dependency id="RabbitMQ.Client" version="[3.4.3]" />
+      <dependency id="Newtonsoft.Json" version="[12.0.0]" />
+    </dependencies>
+  </metadata>
+</package>
